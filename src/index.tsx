@@ -38,3 +38,4 @@ export async function uniffiInitAsync() {
 export default {
   pshenmic_dpp_v2_uniffi,
 };
+
