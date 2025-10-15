@@ -1,0 +1,5 @@
+---
+rust:
+  repo: https://github.com/owl352/pshenmic-dpp-v2-uniffi
+  branch: master
+  manifestPath: Cargo.toml

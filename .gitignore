@@ -84,3 +84,10 @@ android/generated
 
 # React Native Nitro Modules
 nitrogen/
+
+# Intelij
+.idea
+
+# From uniffi-bindgen-react-native
+*.a
+rust_modules/
