@@ -31,25 +31,11 @@ import nativeModule, {
   type UniffiForeignFutureCompleteVoid,
 } from './pshenmic_dpp_v2_uniffi-ffi';
 import {
-  type FfiConverter,
   type UniffiByteArray,
-  type UniffiObjectFactory,
-  type UniffiRustArcPtr,
-  type UnsafeMutableRawPointer,
-  AbstractFfiConverterByteArray,
-  FfiConverterInt32,
-  FfiConverterObject,
-  FfiConverterUInt64,
   RustBuffer,
-  UniffiAbstractObject,
-  UniffiError,
   UniffiInternalError,
   UniffiRustCaller,
-  destructorGuardSymbol,
-  pointerLiteralSymbol,
   uniffiCreateFfiConverterString,
-  uniffiTypeNameSymbol,
-  variantOrdinalSymbol,
 } from 'uniffi-bindgen-react-native';
 
 // Get converters from the other files, if any.
@@ -88,208 +74,6 @@ const stringConverter = {
 };
 const FfiConverterString = uniffiCreateFfiConverterString(stringConverter);
 
-// Flat error type: IdentifierError
-export enum IdentifierError_Tags {
-  ParsingErrorBase58 = 'ParsingErrorBase58',
-}
-export const IdentifierError = (() => {
-  class ParsingErrorBase58 extends UniffiError {
-    /**
-     * @private
-     * This field is private and should not be used.
-     */
-    readonly [uniffiTypeNameSymbol]: string = 'IdentifierError';
-    /**
-     * @private
-     * This field is private and should not be used.
-     */
-    readonly [variantOrdinalSymbol] = 1;
-
-    public readonly tag = IdentifierError_Tags.ParsingErrorBase58;
-
-    constructor(message: string) {
-      super('IdentifierError', 'ParsingErrorBase58', message);
-    }
-
-    static instanceOf(e: any): e is ParsingErrorBase58 {
-      return instanceOf(e) && (e as any)[variantOrdinalSymbol] === 1;
-    }
-  }
-
-  // Utility function which does not rely on instanceof.
-  function instanceOf(e: any): e is IdentifierError {
-    return (e as any)[uniffiTypeNameSymbol] === 'IdentifierError';
-  }
-  return {
-    ParsingErrorBase58,
-    instanceOf,
-  };
-})();
-
-// Union type for IdentifierError error type.
-
-export type IdentifierError = InstanceType<
-  (typeof IdentifierError)[keyof Omit<typeof IdentifierError, 'instanceOf'>]
->;
-
-const FfiConverterTypeIdentifierError = (() => {
-  const intConverter = FfiConverterInt32;
-  type TypeName = IdentifierError;
-  class FfiConverter extends AbstractFfiConverterByteArray<TypeName> {
-    read(from: RustBuffer): TypeName {
-      switch (intConverter.read(from)) {
-        case 1:
-          return new IdentifierError.ParsingErrorBase58(
-            FfiConverterString.read(from)
-          );
-
-        default:
-          throw new UniffiInternalError.UnexpectedEnumCase();
-      }
-    }
-    write(value: TypeName, into: RustBuffer): void {
-      const obj = value as any;
-      const index = obj[variantOrdinalSymbol] as number;
-      intConverter.write(index, into);
-    }
-    allocationSize(value: TypeName): number {
-      return intConverter.allocationSize(0);
-    }
-  }
-  return new FfiConverter();
-})();
-
-export interface IdentifierInterface {
-  toHex(): string;
-}
-
-export class Identifier
-  extends UniffiAbstractObject
-  implements IdentifierInterface
-{
-  readonly [uniffiTypeNameSymbol] = 'Identifier';
-  readonly [destructorGuardSymbol]: UniffiRustArcPtr;
-  readonly [pointerLiteralSymbol]: UnsafeMutableRawPointer;
-  constructor(id: string) /*throws*/ {
-    super();
-    const pointer = uniffiCaller.rustCallWithError(
-      /*liftError:*/ FfiConverterTypeIdentifierError.lift.bind(
-        FfiConverterTypeIdentifierError
-      ),
-      /*caller:*/ (callStatus) => {
-        return nativeModule().ubrn_uniffi_pshenmic_dpp_fn_constructor_identifier_new(
-          FfiConverterString.lower(id),
-          callStatus
-        );
-      },
-      /*liftString:*/ FfiConverterString.lift
-    );
-    this[pointerLiteralSymbol] = pointer;
-    this[destructorGuardSymbol] =
-      uniffiTypeIdentifierObjectFactory.bless(pointer);
-  }
-
-  public toHex(): string {
-    return FfiConverterString.lift(
-      uniffiCaller.rustCall(
-        /*caller:*/ (callStatus) => {
-          return nativeModule().ubrn_uniffi_pshenmic_dpp_fn_method_identifier_to_hex(
-            uniffiTypeIdentifierObjectFactory.clonePointer(this),
-            callStatus
-          );
-        },
-        /*liftString:*/ FfiConverterString.lift
-      )
-    );
-  }
-
-  /**
-   * {@inheritDoc uniffi-bindgen-react-native#UniffiAbstractObject.uniffiDestroy}
-   */
-  uniffiDestroy(): void {
-    const ptr = (this as any)[destructorGuardSymbol];
-    if (ptr !== undefined) {
-      const pointer = uniffiTypeIdentifierObjectFactory.pointer(this);
-      uniffiTypeIdentifierObjectFactory.freePointer(pointer);
-      uniffiTypeIdentifierObjectFactory.unbless(ptr);
-      delete (this as any)[destructorGuardSymbol];
-    }
-  }
-
-  static instanceOf(obj: any): obj is Identifier {
-    return uniffiTypeIdentifierObjectFactory.isConcreteType(obj);
-  }
-}
-
-const uniffiTypeIdentifierObjectFactory: UniffiObjectFactory<IdentifierInterface> =
-  (() => {
-    return {
-      create(pointer: UnsafeMutableRawPointer): IdentifierInterface {
-        const instance = Object.create(Identifier.prototype);
-        instance[pointerLiteralSymbol] = pointer;
-        instance[destructorGuardSymbol] = this.bless(pointer);
-        instance[uniffiTypeNameSymbol] = 'Identifier';
-        return instance;
-      },
-
-      bless(p: UnsafeMutableRawPointer): UniffiRustArcPtr {
-        return uniffiCaller.rustCall(
-          /*caller:*/ (status) =>
-            nativeModule().ubrn_uniffi_internal_fn_method_identifier_ffi__bless_pointer(
-              p,
-              status
-            ),
-          /*liftString:*/ FfiConverterString.lift
-        );
-      },
-
-      unbless(ptr: UniffiRustArcPtr) {
-        ptr.markDestroyed();
-      },
-
-      pointer(obj: IdentifierInterface): UnsafeMutableRawPointer {
-        if ((obj as any)[destructorGuardSymbol] === undefined) {
-          throw new UniffiInternalError.UnexpectedNullPointer();
-        }
-        return (obj as any)[pointerLiteralSymbol];
-      },
-
-      clonePointer(obj: IdentifierInterface): UnsafeMutableRawPointer {
-        const pointer = this.pointer(obj);
-        return uniffiCaller.rustCall(
-          /*caller:*/ (callStatus) =>
-            nativeModule().ubrn_uniffi_pshenmic_dpp_fn_clone_identifier(
-              pointer,
-              callStatus
-            ),
-          /*liftString:*/ FfiConverterString.lift
-        );
-      },
-
-      freePointer(pointer: UnsafeMutableRawPointer): void {
-        uniffiCaller.rustCall(
-          /*caller:*/ (callStatus) =>
-            nativeModule().ubrn_uniffi_pshenmic_dpp_fn_free_identifier(
-              pointer,
-              callStatus
-            ),
-          /*liftString:*/ FfiConverterString.lift
-        );
-      },
-
-      isConcreteType(obj: any): obj is IdentifierInterface {
-        return (
-          obj[destructorGuardSymbol] &&
-          obj[uniffiTypeNameSymbol] === 'Identifier'
-        );
-      },
-    };
-  })();
-// FfiConverter for IdentifierInterface
-const FfiConverterTypeIdentifier = new FfiConverterObject(
-  uniffiTypeIdentifierObjectFactory
-);
-
 /**
  * This should be called before anything else.
  *
@@ -312,28 +96,8 @@ function uniffiEnsureInitialized() {
       bindingsContractVersion
     );
   }
-  if (
-    nativeModule().ubrn_uniffi_pshenmic_dpp_checksum_method_identifier_to_hex() !==
-    11163
-  ) {
-    throw new UniffiInternalError.ApiChecksumMismatch(
-      'uniffi_pshenmic_dpp_checksum_method_identifier_to_hex'
-    );
-  }
-  if (
-    nativeModule().ubrn_uniffi_pshenmic_dpp_checksum_constructor_identifier_new() !==
-    43777
-  ) {
-    throw new UniffiInternalError.ApiChecksumMismatch(
-      'uniffi_pshenmic_dpp_checksum_constructor_identifier_new'
-    );
-  }
 }
 
 export default Object.freeze({
   initialize: uniffiEnsureInitialized,
-  converters: {
-    FfiConverterTypeIdentifier,
-    FfiConverterTypeIdentifierError,
-  },
 });

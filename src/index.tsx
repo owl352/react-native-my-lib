@@ -11,11 +11,13 @@ if (!rustInstalled) {
 }
 
 // Export the generated bindings to the app.
+export * from './generated/identifier';
 export * from './generated/pshenmic_dpp_v2_uniffi';
 
 // Now import the bindings so we can:
 // - intialize them
 // - export them as namespaced objects as the default export.
+import * as identifier from './generated/identifier';
 import * as pshenmic_dpp_v2_uniffi from './generated/pshenmic_dpp_v2_uniffi';
 
 // Initialize the generated bindings: mostly checksums, but also callbacks.
@@ -23,6 +25,7 @@ import * as pshenmic_dpp_v2_uniffi from './generated/pshenmic_dpp_v2_uniffi';
 //   is reloaded (e.g. during development with metro).
 let initialized = false;
 if (!initialized) {
+  identifier.default.initialize();
   pshenmic_dpp_v2_uniffi.default.initialize();
   initialized = true;
 }
@@ -36,6 +39,7 @@ export async function uniffiInitAsync() {
 
 // Export the crates as individually namespaced objects.
 export default {
+  identifier,
   pshenmic_dpp_v2_uniffi,
 };
 

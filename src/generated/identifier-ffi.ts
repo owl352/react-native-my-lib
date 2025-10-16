@@ -23,16 +23,48 @@ interface NativeModuleInterface {
     buffer: Uint8Array,
     uniffi_out_err: UniffiRustCallStatus
   ): string;
-  ubrn_ffi_pshenmic_dpp_uniffi_contract_version(): number;
+  ubrn_uniffi_identifier_fn_clone_identifierffi(
+    ptr: bigint,
+    uniffi_out_err: UniffiRustCallStatus
+  ): bigint;
+  ubrn_uniffi_identifier_fn_free_identifierffi(
+    ptr: bigint,
+    uniffi_out_err: UniffiRustCallStatus
+  ): void;
+  ubrn_uniffi_identifier_fn_constructor_identifierffi_new(
+    id: Uint8Array,
+    uniffi_out_err: UniffiRustCallStatus
+  ): bigint;
+  ubrn_uniffi_identifier_fn_method_identifierffi_to_base58(
+    ptr: bigint,
+    uniffi_out_err: UniffiRustCallStatus
+  ): Uint8Array;
+  ubrn_uniffi_identifier_fn_method_identifierffi_to_base64(
+    ptr: bigint,
+    uniffi_out_err: UniffiRustCallStatus
+  ): Uint8Array;
+  ubrn_uniffi_identifier_fn_method_identifierffi_to_hex(
+    ptr: bigint,
+    uniffi_out_err: UniffiRustCallStatus
+  ): Uint8Array;
+  ubrn_uniffi_identifier_checksum_method_identifierffi_to_base58(): number;
+  ubrn_uniffi_identifier_checksum_method_identifierffi_to_base64(): number;
+  ubrn_uniffi_identifier_checksum_method_identifierffi_to_hex(): number;
+  ubrn_uniffi_identifier_checksum_constructor_identifierffi_new(): number;
+  ubrn_ffi_identifier_uniffi_contract_version(): number;
+  ubrn_uniffi_internal_fn_method_identifierffi_ffi__bless_pointer(
+    pointer: bigint,
+    uniffi_out_err: UniffiRustCallStatus
+  ): UniffiRustArcPtr;
 }
 
-// Casting globalThis to any allows us to look for `NativePshenmicDppV2Uniffi`
+// Casting globalThis to any allows us to look for `NativeIdentifier`
 // if it was added via JSI.
 //
-// We use a getter here rather than simply `globalThis.NativePshenmicDppV2Uniffi` so that
+// We use a getter here rather than simply `globalThis.NativeIdentifier` so that
 // if/when the startup sequence isn't just so, an empty value isn't inadvertantly cached.
 const getter: () => NativeModuleInterface = () =>
-  (globalThis as any).NativePshenmicDppV2Uniffi;
+  (globalThis as any).NativeIdentifier;
 export default getter;
 
 // Structs and function types for calling back into Typescript from Rust.
